@@ -22,4 +22,8 @@ Vagrant.configure("2") do |config|
   end
   config.vm.network "forwarded_port", guest: 80, host: 80  
   config.vm.network "forwarded_port", guest: 443, host: 443  
+
+  # synced_folde settings
+  config.vm.network "private_network", ip: "192.168.100.2"
+  config.vm.synced_folder ".", "/home/core/share", type: "nfs"
 end
