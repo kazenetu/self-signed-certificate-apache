@@ -6,13 +6,24 @@
 - Vagrant 2.0.2
 
 ## 実行手順
-1. 本リポジトリをクローンする
+1. 本リポジトリをクローンする(初回のみ)
+1. ゲスト(CoreOS)とのファイル共有を行う(初回のみ)
+    1. Windowsでnfsを利用できるよう下記を実行(Windowsのみ)  
+    ```vagrant plugin install vagrant-winnfsd```
+    1. Vagrantfileに必ず下記を記述する
+       1. config.vm.networkを記述  
+      例）```config.vm.network "private_network", ip: "192.168.100.2"```
+       1. config.vm.synced_folderを記述  
+      例）```config.vm.synced_folder ".", "/home/core/share", type: "nfs"```
 1. コマンドプロンプトで仮想サーバーの起動を行う  
     ```vagrant up```
 1. 仮想サーバーにログインする 
     ```vagrant ssh```
-1. Dockerfileをビルドする(イメージ名をmy-apache2とする)  
-  ```docker build -t my-apache2 .```
+1. Dockerfileをビルドする
+    1. 共有フォルダに移動する  
+       ```cd /home/core/share```
+    1. ビルドする(イメージ名をmy-apache2とする)   
+       ```docker build -t my-apache2 .```
 1. ビルドしたイメージを実行する  
   ```docker run --rm -p 80:80 -p 443:443 -d -t --name my-running-app my-apache2```
 1. ブラウザで下記を試す
